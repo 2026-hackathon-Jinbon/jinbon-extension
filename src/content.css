@@ -1,0 +1,164 @@
+#jinbon-extension-root {
+  position: fixed;
+  right: 20px;
+  bottom: 88px;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: #111827;
+}
+
+#jinbon-extension-root * {
+  box-sizing: border-box;
+}
+
+.jinbon-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  padding: 0 14px 0 10px;
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  border-radius: 999px;
+  background: #ffffff;
+  color: #111827;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+  font: 700 14px/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+
+.jinbon-button:hover {
+  background: #f8fafc;
+}
+
+.jinbon-mark {
+  display: inline-grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: #111827;
+  color: #ffffff;
+  font-size: 13px;
+}
+
+#jinbon-extension-root[data-jinbon-state="loading"] .jinbon-mark {
+  animation: jinbonPulse 1s ease-in-out infinite;
+}
+
+.jinbon-panel {
+  width: min(340px, calc(100vw - 32px));
+  padding: 14px;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  border-left: 4px solid #64748b;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.28);
+}
+
+.jinbon-panel[hidden] {
+  display: none;
+}
+
+.jinbon-panel.is-success {
+  border-left-color: #16a34a;
+}
+
+.jinbon-panel.is-warning {
+  border-left-color: #f59e0b;
+}
+
+.jinbon-panel.is-error {
+  border-left-color: #dc2626;
+}
+
+.jinbon-panel.is-loading {
+  border-left-color: #2563eb;
+}
+
+.jinbon-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.jinbon-panel strong {
+  font-size: 15px;
+  line-height: 1.25;
+}
+
+.jinbon-close {
+  width: 26px;
+  height: 26px;
+  border: 0;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.jinbon-panel p {
+  margin: 0;
+  color: #334155;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.jinbon-panel dl {
+  display: grid;
+  gap: 7px;
+  margin: 12px 0 0;
+}
+
+.jinbon-panel dl div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 7px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.jinbon-panel dt,
+.jinbon-panel dd {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.jinbon-panel dt {
+  color: #64748b;
+}
+
+.jinbon-panel dd {
+  max-width: 190px;
+  color: #111827;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.jinbon-panel small {
+  display: block;
+  margin-top: 10px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+@keyframes jinbonPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.55; }
+}
+
+@media (max-width: 640px) {
+  #jinbon-extension-root {
+    right: 12px;
+    bottom: 72px;
+  }
+}
