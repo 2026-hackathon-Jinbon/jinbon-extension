@@ -1,17 +1,19 @@
 # jinbon-extension
 
-YouTube 또는 Netflix에서 보고 있는 영상의 진본 여부를 확인하는 Chrome 확장 프로그램입니다.
+YouTube와 Instagram에서 보고 있는 영상의 진본 여부를 확인하는 Chrome 확장 프로그램입니다.
 
 영상 페이지에 `진본 확인` 버튼을 띄우고, 사용자가 버튼을 누르면 현재 영상 URL을 진본 백엔드로 보내 검증 결과를 보여줍니다.
 
 ## 동작 흐름
 
-1. 사용자가 YouTube/Netflix 영상 페이지에 들어갑니다.
+1. 사용자가 YouTube 영상 페이지에 들어갑니다.
 2. 확장 프로그램이 화면 오른쪽 아래에 `진본 확인` 버튼을 표시합니다.
 3. 사용자가 버튼을 누릅니다.
 4. 확장 프로그램이 현재 영상 URL을 백엔드 API로 보냅니다.
 5. 백엔드가 영상을 분석하고 진본 여부를 응답합니다.
 6. 확장 프로그램이 결과 패널을 화면에 보여줍니다.
+
+Instagram 게시물과 릴스에서도 같은 방식으로 확인할 수 있습니다.
 
 ## 지원 페이지
 
@@ -19,7 +21,9 @@ YouTube 또는 Netflix에서 보고 있는 영상의 진본 여부를 확인하�
 
 - YouTube 일반 영상: `https://www.youtube.com/watch?v=...`
 - YouTube Shorts: `https://www.youtube.com/shorts/...`
-- Netflix 시청 페이지: `https://www.netflix.com/watch/...`
+- Instagram 릴스: `https://www.instagram.com/reel/...`
+- Instagram 게시물: `https://www.instagram.com/p/...`
+- Instagram 동영상: `https://www.instagram.com/tv/...`
 
 ## 필요한 준비
 
@@ -78,7 +82,7 @@ cd /Users/se00/Documents/projects/jinbon/jinbon-backend
 ./scripts/run-local.sh
 ```
 
-2. Chrome에서 YouTube 영상 페이지를 엽니다.
+2. Chrome에서 YouTube 또는 Instagram 영상 페이지를 엽니다.
 
 ```text
 https://www.youtube.com/watch?v=...
@@ -114,9 +118,8 @@ http://localhost:8070
 
 아래 페이지인지 확인합니다.
 
-- YouTube `watch` 페이지
-- YouTube `shorts` 페이지
-- Netflix `watch` 페이지
+- YouTube `watch`·`shorts` 페이지
+- Instagram `reel`·`p`·`tv` 페이지
 
 확장 프로그램을 방금 수정했다면 `chrome://extensions`에서 새로고침 버튼을 누른 뒤 영상 페이지도 새로고침합니다.
 
@@ -145,7 +148,7 @@ URL 기반 검증은 백엔드가 영상을 다운로드하고 프레임을 분�
 ## 주요 파일
 
 - `manifest.json`: Chrome 확장 프로그램 설정
-- `src/content.js`: YouTube/Netflix 페이지에 버튼과 결과 패널을 표시
+- `src/content.js`: YouTube·Instagram 페이지에 버튼과 결과 패널을 표시
 - `src/background.js`: 백엔드 API 호출 담당
 - `src/content.css`: 페이지에 표시되는 버튼/패널 스타일
 - `src/popup.html`: 확장 프로그램 팝업 화면

@@ -1,5 +1,5 @@
 const ROOT_ID = 'jinbon-extension-root';
-const SUPPORTED_HOSTS = ['youtube.com', 'netflix.com'];
+const SUPPORTED_HOSTS = ['youtube.com', 'instagram.com'];
 
 let lastUrl = '';
 let isVerifying = false;
@@ -29,7 +29,7 @@ function isSupportedVideoPage() {
 
   if (!supported) return false;
   if (host.includes('youtube.com')) return location.pathname === '/watch' || location.pathname.startsWith('/shorts/');
-  if (host.includes('netflix.com')) return location.pathname.startsWith('/watch/');
+  if (host.includes('instagram.com')) return /^\/(reel|p|tv)\/[^/]+/.test(location.pathname);
 
   return false;
 }
@@ -112,8 +112,8 @@ function getCanonicalVideoUrl() {
     }
   }
 
-  if (url.hostname.includes('netflix.com') && url.pathname.startsWith('/watch/')) {
-    return `https://www.netflix.com${url.pathname}`;
+  if (url.hostname.includes('instagram.com') && /^\/(reel|p|tv)\/[^/]+/.test(url.pathname)) {
+    return `https://www.instagram.com${url.pathname}`;
   }
 
   return location.href;

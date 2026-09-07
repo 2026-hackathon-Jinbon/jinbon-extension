@@ -1,15 +1,15 @@
 {
   "manifest_version": 3,
   "name": "Jinbon Video Verifier",
-  "description": "YouTube와 Netflix 영상 페이지에서 진본 여부를 확인합니다.",
+  "description": "YouTube와 Instagram 영상 페이지에서 진본 여부를 확인합니다.",
   "version": "0.1.0",
   "permissions": ["storage", "activeTab"],
   "host_permissions": [
     "http://localhost:8070/*",
     "https://www.youtube.com/*",
     "https://youtube.com/*",
-    "https://www.netflix.com/*",
-    "https://netflix.com/*"
+    "https://www.instagram.com/*",
+    "https://instagram.com/*"
   ],
   "background": {
     "service_worker": "src/background.js"
@@ -19,8 +19,8 @@
       "matches": [
         "https://www.youtube.com/*",
         "https://youtube.com/*",
-        "https://www.netflix.com/*",
-        "https://netflix.com/*"
+        "https://www.instagram.com/*",
+        "https://instagram.com/*"
       ],
       "js": ["src/content.js"],
       "css": ["src/content.css"],
