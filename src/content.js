@@ -120,9 +120,19 @@ function getCanonicalVideoUrl() {
 }
 
 function renderResult(root, result) {
-  const title = result.authentic ? '진본으로 확인됨' : '진본 확인 안 됨';
-  const message = result.message || (result.authentic ? '등록된 진본 기록과 일치합니다.' : '등록된 진본 기록을 찾지 못했습니다.');
-  const tone = result.authentic ? 'success' : 'warning';
+  const status = result.displayStatus || (result.authentic ? 'AUTHENTICATED' : 'NOT_AUTHENTICATED');
+  let title, tone;
+  if (status === 'AUTHENTICATED') {
+    title = '진본 인증';
+    tone = 'success';
+  } else if (status === 'UNAVAILABLE') {
+    title = '확인 중';
+    tone = 'warning';
+  } else {
+    title = '미인증';
+    tone = 'warning';
+  }
+  const message = result.message || (status === 'AUTHENTICATED' ? '블록체인에 등록이 확인된 영상입니다.' : '등록된 진본 기록을 찾지 못했습니다.');
   const meta = buildMeta(result);
 
   renderPanel(root, { title, message, tone, meta, notice: result.notice });
@@ -130,12 +140,7 @@ function renderResult(root, result) {
 
 function buildMeta(result) {
   const rows = [];
-  if (result.verdict) rows.push(['판정', formatVerdict(result.verdict)]);
-  if (typeof result.similarityDistance === 'number') rows.push(['유사도 거리', result.similarityDistance.toFixed(1)]);
-  if (result.videoId) rows.push(['영상 ID', String(result.videoId)]);
   if (result.registeredAt) rows.push(['등록 시각', formatDate(result.registeredAt)]);
-  rows.push(['블록체인', result.blockchainVerified ? '검증됨' : '미검증']);
-  rows.push(['VC', result.vcVerified ? '검증됨' : '미검증']);
   return rows;
 }
 
@@ -157,14 +162,6 @@ function renderPanel(root, { title, message, tone, meta = [], notice = '' }) {
     panel.hidden = true;
     root.setAttribute('data-jinbon-state', 'idle');
   });
-}
-
-function formatVerdict(verdict) {
-  return String(verdict)
-    .toLowerCase()
-    .split('_')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
 }
 
 function formatDate(value) {
