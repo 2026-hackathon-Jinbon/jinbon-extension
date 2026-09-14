@@ -123,8 +123,14 @@ function renderResult(root, result) {
   const status = result.displayStatus || (result.authentic ? 'AUTHENTICATED' : 'NOT_AUTHENTICATED');
   let title, tone;
   if (status === 'AUTHENTICATED') {
-    title = '진본 인증';
+    title = '등록 원본과 일치';
     tone = 'success';
+  } else if (status === 'CONTENT_SIMILAR') {
+    title = '등록 영상과 유사';
+    tone = 'warning';
+  } else if (status === 'PARTIAL_SIMILAR') {
+    title = '부분 유사 · 원본 일치 확인 불가';
+    tone = 'warning';
   } else if (status === 'UNAVAILABLE') {
     title = '확인 중';
     tone = 'warning';
@@ -140,6 +146,10 @@ function renderResult(root, result) {
 
 function buildMeta(result) {
   const rows = [];
+  if (result.videoId != null) {
+    rows.push(['등록 증거', result.blockchainVerified && result.vcVerified && result.vcClaimsBound
+      ? '블록체인·보증서 확인됨' : '검증 미완료']);
+  }
   if (result.registeredAt) rows.push(['등록 시각', formatDate(result.registeredAt)]);
   return rows;
 }
