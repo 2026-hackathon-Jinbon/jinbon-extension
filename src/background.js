@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:8070';
+const DEFAULT_API_BASE_URL = 'https://3.34.244.155.sslip.io';
 
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type !== 'JINBON_VERIFY_URL') {

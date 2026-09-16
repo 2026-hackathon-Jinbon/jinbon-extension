@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE_URL = 'http://localhost:8070';
+const DEFAULT_API_BASE_URL = 'https://3.34.244.155.sslip.io';
 const input = document.getElementById('apiBaseUrl');
 const saveButton = document.getElementById('save');
 const status = document.getElementById('status');
