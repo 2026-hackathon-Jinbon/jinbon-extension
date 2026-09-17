@@ -1,9 +1,12 @@
 {
   "manifest_version": 3,
   "name": "Jinbon Video Verifier",
-  "description": "YouTube와 Instagram 영상 페이지에서 진본 여부를 확인합니다.",
-  "version": "0.1.0",
-  "permissions": ["storage", "activeTab"],
+  "description": "YouTube와 Instagram에서 진본을 확인하고, 원본 파일 일치 또는 영상·음성 비교 근거를 확인합니다.",
+  "version": "0.1.1",
+  "permissions": [
+    "storage",
+    "activeTab"
+  ],
   "host_permissions": [
     "https://3.34.244.155.sslip.io/*",
     "https://www.youtube.com/*",
@@ -22,8 +25,12 @@
         "https://www.instagram.com/*",
         "https://instagram.com/*"
       ],
-      "js": ["src/content.js"],
-      "css": ["src/content.css"],
+      "js": [
+        "src/content.js"
+      ],
+      "css": [
+        "src/content.css"
+      ],
       "run_at": "document_idle"
     }
   ],

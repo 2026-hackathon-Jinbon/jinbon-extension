@@ -123,10 +123,10 @@ function renderResult(root, result) {
   const status = result.displayStatus || (result.authentic ? 'AUTHENTICATED' : 'NOT_AUTHENTICATED');
   let title, tone;
   if (status === 'AUTHENTICATED') {
-    title = '등록 원본과 일치';
+    title = '진본 확인 완료';
     tone = 'success';
   } else if (status === 'CONTENT_SIMILAR') {
-    title = '등록 영상과 유사';
+    title = '진본 확인 보류 · 등록 영상과 유사';
     tone = 'warning';
   } else if (status === 'PARTIAL_SIMILAR') {
     title = '부분 유사 · 원본 일치 확인 불가';
@@ -135,7 +135,7 @@ function renderResult(root, result) {
     title = '확인 중';
     tone = 'warning';
   } else {
-    title = '미인증';
+    title = result.verdict === 'NOT_REGISTERED' ? '등록 기록 없음' : '미인증';
     tone = 'warning';
   }
   const message = result.message || (status === 'AUTHENTICATED' ? '블록체인에 등록이 확인된 영상입니다.' : '등록된 진본 기록을 찾지 못했습니다.');
@@ -146,6 +146,12 @@ function renderResult(root, result) {
 
 function buildMeta(result) {
   const rows = [];
+  if (result.verdict === 'EXACT_MATCH') rows.push(['확인 방식', '원본 파일 정확 일치']);
+  else if (['SIMILAR_MATCH', 'SAME_CONTENT'].includes(result.verdict)) rows.push(['확인 방식', '영상·음성 비교']);
+  if (result.registrantName) {
+    rows.push(['등록자 표시명', result.registrantName]);
+    rows.push(['표시명 안내', '기관 소속·직함의 인증을 뜻하지 않습니다.']);
+  }
   if (result.videoId != null) {
     rows.push(['등록 증거', result.blockchainVerified && result.vcVerified && result.vcClaimsBound
       ? '블록체인·보증서 확인됨' : '검증 미완료']);
