@@ -88,9 +88,12 @@ async function verifyCurrentVideo(root) {
 
     renderResult(root, response.data);
   } catch (error) {
+    const needsReload = error.message?.includes('Extension context invalidated');
     renderPanel(root, {
-      title: '확인 실패',
-      message: error.message || '백엔드 서버가 켜져 있는지 확인해주세요.',
+      title: needsReload ? '페이지 새로고침 필요' : '확인 실패',
+      message: needsReload
+        ? '확장 프로그램이 다시 로드되었습니다. 현재 영상 페이지를 새로고침한 뒤 다시 확인해주세요.'
+        : error.message || '백엔드 서버가 켜져 있는지 확인해주세요.',
       tone: 'error',
     });
   } finally {
@@ -121,24 +124,31 @@ function getCanonicalVideoUrl() {
 
 function renderResult(root, result) {
   const status = result.displayStatus || (result.authentic ? 'AUTHENTICATED' : 'NOT_AUTHENTICATED');
+  const comparisonFailed = status === 'CONTENT_SIMILAR' || status === 'PARTIAL_SIMILAR';
+  const comparisonAvailable = (result.segmentMatch?.totalQuerySegments ?? 0) > 0
+    && (result.segmentMatch?.totalRefSegments ?? 0) > 0
+    && (result.audioMatch?.totalQuerySegments ?? 0) > 0
+    && (result.audioMatch?.totalRefSegments ?? 0) > 0;
+  const audioMismatch = comparisonFailed && comparisonAvailable && (result.audioMatch?.unmatchedRanges.length ?? 0) > 0;
+  const videoMismatch = comparisonFailed && comparisonAvailable && (result.segmentMatch?.unmatchedRanges.length ?? 0) > 0;
   let title, tone;
   if (status === 'AUTHENTICATED') {
-    title = '진본 확인 완료';
+    title = '진본 확인';
     tone = 'success';
-  } else if (status === 'CONTENT_SIMILAR') {
-    title = '진본 확인 보류 · 등록 영상과 유사';
-    tone = 'warning';
-  } else if (status === 'PARTIAL_SIMILAR') {
-    title = '부분 유사 · 원본 일치 확인 불가';
+  } else if (comparisonFailed) {
+    title = audioMismatch || videoMismatch ? '원본 불일치' : '확인 불가';
     tone = 'warning';
   } else if (status === 'UNAVAILABLE') {
-    title = '확인 중';
+    title = '확인 불가';
     tone = 'warning';
   } else {
-    title = result.verdict === 'NOT_REGISTERED' ? '등록 기록 없음' : '미인증';
+    title = result.verdict === 'NOT_REGISTERED' ? '등록 기록 없음' : '확인 불가';
     tone = 'warning';
   }
-  const message = result.message || (status === 'AUTHENTICATED' ? '블록체인에 등록이 확인된 영상입니다.' : '등록된 진본 기록을 찾지 못했습니다.');
+  const message = audioMismatch && videoMismatch ? '등록 원본과의 영상·음성 비교에서 불일치가 확인되었습니다.'
+    : audioMismatch ? '등록 영상과의 음성 비교에서 불일치가 확인되었습니다.'
+    : videoMismatch ? '등록 원본과의 영상 비교에서 불일치가 확인되었습니다.'
+    : result.message || (status === 'AUTHENTICATED' ? '블록체인에 등록이 확인된 영상입니다.' : '진본 여부를 확인할 수 없습니다.');
   const meta = buildMeta(result);
 
   renderPanel(root, { title, message, tone, meta, notice: result.notice });
@@ -150,7 +160,6 @@ function buildMeta(result) {
   else if (['SIMILAR_MATCH', 'SAME_CONTENT'].includes(result.verdict)) rows.push(['확인 방식', '영상·음성 비교']);
   if (result.registrantName) {
     rows.push(['등록자 표시명', result.registrantName]);
-    rows.push(['표시명 안내', '기관 소속·직함의 인증을 뜻하지 않습니다.']);
   }
   if (result.videoId != null) {
     rows.push(['등록 증거', result.blockchainVerified && result.vcVerified && result.vcClaimsBound

@@ -8,6 +8,8 @@
     "activeTab"
   ],
   "host_permissions": [
+    "http://localhost/*",
+    "http://127.0.0.1/*",
     "https://3.34.244.155.sslip.io/*",
     "https://www.youtube.com/*",
     "https://youtube.com/*",
